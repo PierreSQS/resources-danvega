@@ -1,3 +1,6 @@
 spring:
   application:
     name: resources
+
+resource:
+  url: "https://raw.githubusercontent.com/danvega/danvega/refs/heads/master/README.md"

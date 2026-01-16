@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * Example 1: Loading Resources with @Value and Resource
- *
+ * <p>
  * Spring's Resource interface provides a powerful abstraction for accessing low-level resources.
  * When combined with @Value, Spring automatically creates the appropriate Resource implementation
  * based on the prefix you use in the resource path.
@@ -20,6 +20,11 @@ import java.nio.charset.StandardCharsets;
 @RestController
 public class ResourceController {
 
+    public static final String FILENAME = "Filename: ";
+    public static final String EXISTS = "Exists: ";
+    public static final String READABLE = "Readable: ";
+    public static final String DESCRIPTION = "Description: ";
+    public static final String CLASS = "Class: ";
     // ==================== CLASSPATH RESOURCE ====================
     // Use "classpath:" to load files from src/main/resources
     // Spring creates a ClassPathResource instance
@@ -31,7 +36,7 @@ public class ResourceController {
     // Use "https://" (or "http://") to load resources from the web
     // Spring creates a UrlResource instance
     // Useful for loading remote configuration, data files, or documentation
-    @Value("https://raw.githubusercontent.com/danvega/danvega/refs/heads/master/README.md")
+    @Value("${resource.url}")
     private Resource urlResource;
 
     // ==================== FILE SYSTEM RESOURCE ====================
@@ -55,12 +60,12 @@ public class ResourceController {
     /**
      * GET /classpath
      * Demonstrates using ClassPathResource directly instead of @Value injection.
-     *
+     * <p>
      * You can instantiate Resource implementations directly when:
      * - You need to create resources programmatically (e.g., in a loop or based on logic)
      * - You're in a non-Spring-managed class (no @Value available)
      * - You prefer explicit control over the resource type
-     *
+     * <p>
      * Available implementations: ClassPathResource, FileSystemResource, UrlResource, etc.
      */
     @GetMapping("/classpath")
@@ -95,29 +100,29 @@ public class ResourceController {
      * Shows filename, existence check, readability, and description.
      */
     @GetMapping("/info")
-    public String getResourceInfo() throws IOException {
+    public String getResourceInfo() {
         StringBuilder info = new StringBuilder();
 
         info.append("=== Classpath Resource (myFile.txt) ===\n");
-        info.append("Filename: ").append(classpathResource.getFilename()).append("\n");
-        info.append("Exists: ").append(classpathResource.exists()).append("\n");
-        info.append("Readable: ").append(classpathResource.isReadable()).append("\n");
-        info.append("Description: ").append(classpathResource.getDescription()).append("\n");
-        info.append("Class: ").append(classpathResource.getClass().getSimpleName()).append("\n\n");
+        info.append(FILENAME).append(classpathResource.getFilename()).append("\n");
+        info.append(EXISTS).append(classpathResource.exists()).append("\n");
+        info.append(READABLE).append(classpathResource.isReadable()).append("\n");
+        info.append(DESCRIPTION).append(classpathResource.getDescription()).append("\n");
+        info.append(CLASS).append(classpathResource.getClass().getSimpleName()).append("\n\n");
 
         info.append("=== File Resource (data/config.txt) ===\n");
-        info.append("Filename: ").append(fileResource.getFilename()).append("\n");
-        info.append("Exists: ").append(fileResource.exists()).append("\n");
-        info.append("Readable: ").append(fileResource.isReadable()).append("\n");
-        info.append("Description: ").append(fileResource.getDescription()).append("\n");
-        info.append("Class: ").append(fileResource.getClass().getSimpleName()).append("\n\n");
+        info.append(FILENAME).append(fileResource.getFilename()).append("\n");
+        info.append(EXISTS).append(fileResource.exists()).append("\n");
+        info.append(READABLE).append(fileResource.isReadable()).append("\n");
+        info.append(DESCRIPTION).append(fileResource.getDescription()).append("\n");
+        info.append(CLASS).append(fileResource.getClass().getSimpleName()).append("\n\n");
 
         info.append("=== URL Resource (GitHub README) ===\n");
-        info.append("Filename: ").append(urlResource.getFilename()).append("\n");
-        info.append("Exists: ").append(urlResource.exists()).append("\n");
-        info.append("Readable: ").append(urlResource.isReadable()).append("\n");
-        info.append("Description: ").append(urlResource.getDescription()).append("\n");
-        info.append("Class: ").append(urlResource.getClass().getSimpleName()).append("\n");
+        info.append(FILENAME).append(urlResource.getFilename()).append("\n");
+        info.append(EXISTS).append(urlResource.exists()).append("\n");
+        info.append(READABLE).append(urlResource.isReadable()).append("\n");
+        info.append(DESCRIPTION).append(urlResource.getDescription()).append("\n");
+        info.append(CLASS).append(urlResource.getClass().getSimpleName()).append("\n");
 
         return info.toString();
     }
