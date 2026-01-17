@@ -9,20 +9,21 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Example 3: Loading Multiple Resources with ResourcePatternResolver
- *
+ * <p>
  * When to use ResourcePatternResolver instead of ResourceLoader?
  * ---------------------------------------------------------------
  * Use ResourceLoader:          Load ONE resource by exact path
  * Use ResourcePatternResolver: Load MULTIPLE resources matching a pattern
- *
+ * <p>
  * Pattern Syntax:
  * - classpath:sql/*.sql        → All .sql files in the sql folder
  * - classpath:config/**\/*.xml  → All .xml files in config and subdirectories
  * - classpath*:META-INF/*.xml  → All .xml files from ALL JARs on the classpath
- *
+ * <p>
  * Common use cases:
  * - Loading all database migration scripts
  * - Processing all configuration files in a directory
@@ -41,13 +42,22 @@ public class ResourcePatternController {
     /**
      * GET /sql
      * Load ALL SQL files matching the pattern "classpath:sql/*.sql"
-     *
+     * <p>
      * This demonstrates loading multiple resources at once - something
      * you can't do with ResourceLoader or @Value.
      */
     @GetMapping
     public String getAllSqlFiles() throws IOException {
         Resource[] resources = resourcePatternResolver.getResources("classpath:sql/*.sql");
+
+        // Just to demonstrate sorting with a List, after converting the array to a List
+        List<Resource> resourceList = Arrays.asList(resources);
+
+        resourceList.sort((a, b) -> {
+            String nameA = a.getFilename() != null ? a.getFilename() : "";
+            String nameB = b.getFilename() != null ? b.getFilename() : "";
+            return nameA.compareTo(nameB);
+        });
 
         // Sort by filename to ensure consistent ordering
         Arrays.sort(resources, (a, b) -> {
